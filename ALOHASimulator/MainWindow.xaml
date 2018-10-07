@@ -1,0 +1,150 @@
+﻿<Window x:Class="ALOHASimulator.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:ALOHASimulator.Model"
+        xmlns:localControls="clr-namespace:ALOHASimulator.Controls"
+        xmlns:behaviors="clr-namespace:ALOHASimulator.Behaviors"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        Title="Aloha Simulator Beda Bogdan 341A2 2012" Height="748" Width="1024" WindowStartupLocation="CenterScreen" WindowStyle="SingleBorderWindow" MaxHeight="768" MaxWidth="1024" >
+    <Window.Resources>
+        <Style TargetType="Image" x:Key="ComputerStyle">
+            <Setter Property="Width" Value="70"></Setter>
+            <Setter Property="Height" Value="70"></Setter>
+        </Style>
+        <Style TargetType="Border" x:Key="ComputerBorderStyle">
+            <Setter Property="BorderThickness" Value="2"></Setter>
+            <Setter Property="BorderBrush" Value="Red"></Setter>
+            <Setter Property="CornerRadius" Value="15"></Setter>
+            <Setter Property="Padding" Value="10"></Setter>
+            <Setter Property="Margin" Value="5"></Setter>
+            <Setter Property="Background" Value="#B2DAE4"></Setter>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsActive}" Value="True">
+                    <Setter Property="BorderBrush" Value="Green"></Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <DataTemplate x:Key="PacketTemplate">
+            <Grid>
+                <Image Width="16" Height="16" Source="/ALOHASimulator;component/Assets/Images/packet2.png"></Image>
+                <TextBlock Text="{Binding Info}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="9" FontWeight="DemiBold"></TextBlock>
+            </Grid>
+        </DataTemplate>
+        <Style TargetType="localControls:TimeFrameControl">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="localControls:TimeFrameControl">
+                        <Border>
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="BorderBrush" Value="Green"></Setter>
+                                    <Setter Property="BorderThickness" Value="1"></Setter>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsLost}" Value="True" >
+                                            <Setter Property="BorderBrush" Value="Red"></Setter>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <Grid>
+                                <Image MaxWidth="32" MaxHeight="32" Source="/ALOHASimulator;component/Assets/Images/packet2.png" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>
+                                <TextBlock Text="{Binding Packet.Info}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="9" FontWeight="DemiBold"></TextBlock>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <DataTemplate x:Key="ComputerTemplateLeft">
+            <Border Style="{StaticResource ComputerBorderStyle}">
+                <Grid >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Column="1">
+                        <StackPanel>
+                            <Image Style="{StaticResource ComputerStyle}" Source="/ALOHASimulator;component/Assets/Images/my_computer.png"></Image>
+                            <Grid>
+                                <Grid.Style>
+                                    <Style TargetType="Grid">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsPacketAviable}" Value="False">
+                                                <Setter Property="Visibility" Value="Hidden"></Setter>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Grid.Style>
+                                <Image Width="32" Height="32" Source="/ALOHASimulator;component/Assets/Images/packet2.png"></Image>
+                                <TextBlock Text="{Binding ActivePacketInfo}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12" FontWeight="DemiBold"></TextBlock>
+                            </Grid>
+
+                        </StackPanel>
+                    </Border>
+                   
+                        <ItemsControl  Grid.Column="0" ItemTemplate="{StaticResource PacketTemplate}" ItemsSource="{Binding Packets}" Width="150" MaxHeight="90">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel></WrapPanel>
+                                </ItemsPanelTemplate>
+
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>                    
+
+
+
+                </Grid>
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="ComputerTemplateRight">
+            <Border Style="{StaticResource ComputerBorderStyle}">
+                <Grid >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Column="0">
+                        <StackPanel>
+                            <Image Style="{StaticResource ComputerStyle}" Source="/ALOHASimulator;component/Assets/Images/my_computer.png"></Image>
+                            <Image Width="32" Height="32" Source="/ALOHASimulator;component/Assets/Images/packet2.png" Visibility="Hidden"></Image>
+                        </StackPanel>
+                    </Border>
+                    <ItemsControl  Grid.Column="1" ItemTemplate="{StaticResource PacketTemplate}" ItemsSource="{Binding AcceptedPackets}" Width="150" MaxHeight="90">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel></WrapPanel>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+
+
+                </Grid>
+            </Border>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" ></RowDefinition>     
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <ItemsControl ItemsSource="{Binding SourceComputers}" ItemTemplate="{StaticResource ComputerTemplateLeft}" ></ItemsControl>
+
+            <localControls:ChannelPanel Grid.Column="1">
+                <i:Interaction.Behaviors>
+                    <behaviors:TimeFrameBehavior Channel="{Binding}"></behaviors:TimeFrameBehavior>
+                </i:Interaction.Behaviors>
+            </localControls:ChannelPanel>
+
+
+            <ItemsControl Grid.Column="2" ItemsSource="{Binding DestinationComputers}" ItemTemplate="{StaticResource ComputerTemplateRight}" >
+            </ItemsControl>
+        </Grid>         
+        <Button Grid.Row="1" Content="Click" Click="Button_Click"></Button>
+    </Grid>
+</Window>
